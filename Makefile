@@ -1,11 +1,11 @@
 develop:
-	npx webpack serve
+	npm run start
 
 install:
 	npm ci
 
 build:
-	npx webpack
+	npm run build
 
 lint:
 	npx eslint --fix .
