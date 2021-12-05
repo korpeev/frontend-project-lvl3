@@ -1,7 +1,21 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/index.css';
+import getWatchedState from './watchedState';
 
-const newArr = [1, 2, 3];
+const startApp = async () => {
+  const form = document.querySelector('form');
+  const defaultState = {
+    input: '',
+    feeds: [],
+  };
 
-const arr = [...newArr];
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const url = formData.get('url');
+    const watchedState = await getWatchedState(defaultState);
+    watchedState.input = url;
+  });
+};
 
-console.log(arr);
+startApp();

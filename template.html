@@ -7,13 +7,33 @@
     <title>Document</title>
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid bg-dark p-5">
       <div class="row">
-        <h1>RSS Aggregator</h1>
-        <form class="d-flex justify-content-center">
-          <input type="text" class="form-control me-3" />
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <div class="col-md-10 col-lg-8 mx-auto text-white">
+          <h1 class="display-3">RSS Аггрегатор</h1>
+          <p class="lead">
+            Начните читать RSS сегодня! Это легко, это красиво.
+          </p>
+          <form class="d-flex justify-content-center">
+            <input
+              id="url-input"
+              autofocus=""
+              required=""
+              name="url"
+              aria-label="url"
+              class="form-control w-100"
+              placeholder="ссылка RSS"
+              autocomplete="off"
+            />
+            <button type="submit" class="h-100 btn btn-lg btn-primary px-sm-5">
+              Добавить
+            </button>
+          </form>
+          <p class="mt-2 text-muted">
+            Пример: https://ru.hexlet.io/lessons.rss
+          </p>
+          <p id="error-text" class="text-danger opacity-0">Некорректный url</p>
+        </div>
       </div>
     </div>
   </body>

@@ -1,0 +1,8 @@
+.content {
+  padding: 50px 20px;
+  width: 100vw;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
