@@ -1,21 +1,25 @@
 import onChange from 'on-change';
-import * as yup from 'yup';
+// eslint-disable-next-line import/no-cycle
+import { renderFormInput, renderForm, renderPosts } from './render';
 
-const getWatchedState = (state) =>
-  onChange(state, (path, value) => {
-    const input = document.getElementById('url-input');
-    const errorText = document.getElementById('error-text');
-    const validateSheme = yup.object().shape({
-      url: yup.string().url().required(),
-    });
-    try {
-      validateSheme.validateSync({ url: value });
-      input.value = '';
-      input.focus();
-    } catch (error) {
-      input.classList.add('border-danger');
-      errorText.classList.remove('opacity-0');
-      console.log(error);
+const getWatchedState = (state, i18Instance) =>
+  onChange(state, (path, value, prevValue) => {
+    switch (path) {
+      case 'input': {
+        renderFormInput(state, value);
+        break;
+      }
+      case 'posts': {
+        renderPosts(value);
+        break;
+      }
+      case 'form.status': {
+        state.form.status.replace(prevValue, value);
+        renderForm(state, value, i18Instance);
+        break;
+      }
+      default:
+        break;
     }
   });
 
