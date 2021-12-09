@@ -14,17 +14,17 @@ const startApp = (i18Instance) => {
     },
   };
   const { setErrorText, setInputValue } = hooks(defaultState);
-  const route = {
-    api: (targetUrl) => {
-      const proxyUrl = new URL(
-        '/get',
-        'https://hexlet-allorigins.herokuapp.com'
-      );
-      proxyUrl.searchParams.set('url', targetUrl);
-      proxyUrl.searchParams.set('disableCache', true);
-      return proxyUrl.toString();
-    },
-  };
+  // const route = {
+  //   api: (targetUrl) => {
+  //     const proxyUrl = new URL(
+  //       '/get',
+  //       'https://hexlet-allorigins.herokuapp.com'
+  //     );
+  //     proxyUrl.searchParams.set('url', targetUrl);
+  //     proxyUrl.searchParams.set('disableCache', true);
+  //     return proxyUrl.toString();
+  //   },
+  // };
   const form = document.querySelector('form');
   const erroBlock = document.getElementById('error-text');
   console.log(erroBlock.textContent);
@@ -64,7 +64,6 @@ const startApp = (i18Instance) => {
     const parser = new DOMParser();
     const rss = parser.parseFromString(string, 'text/xml');
     const error = rss.querySelector('parsererror');
-    console.log(error);
     if (error) {
       watchedState.form.status = 'error';
       setErrorText(i18Instance.t('errors.rssNotFound'));

@@ -1,4 +1,4 @@
-import i18next from 'i18next';
+// eslint-disable-next-line import/no-cycle
 import hooks from './hooks';
 
 const renderFormInput = (state, value) => {
