@@ -1,23 +1,24 @@
 import onChange from 'on-change';
-// eslint-disable-next-line import/no-cycle
-import { renderFormInput, renderForm, renderPosts } from './render';
+import { renderForm, renderPosts, renderFeedback, renderFeeds } from './render';
 
 const getWatchedState = (state, i18Instance) =>
-  onChange(state, (path, value, prevValue) => {
+  onChange(state, (path, value) => {
     switch (path) {
-      case 'input': {
-        renderFormInput(state, value);
-        break;
-      }
       case 'posts': {
-        renderPosts(value);
+        renderPosts(value, i18Instance);
         break;
       }
       case 'form.status': {
-        state.form.status.replace(prevValue, value);
-        renderForm(state, value, i18Instance);
+        renderForm(value);
+        renderFeedback(value, i18Instance);
         break;
       }
+      case 'error':
+        renderFeedback(value, i18Instance);
+        break;
+      case 'feeds':
+        renderFeeds(value, i18Instance);
+        break;
       default:
         break;
     }

@@ -1,57 +1,105 @@
-// eslint-disable-next-line import/no-cycle
-import hooks from './hooks';
+const renderPosts = (posts, i18Instance) => {
+  const postsNode = document.querySelector('.posts');
+  // postsNode.innerHTML = '';
 
-const renderFormInput = (state, value) => {
-  const input = document.getElementById('url-input');
-  input.value = value;
+  const headerPostNode = document.createElement('h3');
+  headerPostNode.textContent = i18Instance.t('posts');
+
+  const listNode = document.createElement('ul');
+  listNode.classList.add('list-group');
+
+  posts.forEach(({ title, url, description }) => {
+    const postNode = document.createElement('li');
+    postNode.classList.add(
+      'list-group-item',
+      'd-flex',
+      'flex-column',
+      'justify-content-between',
+      'align-items-start'
+    );
+
+    const linkNode = document.createElement('a');
+    linkNode.classList.add('fw-bold');
+    linkNode.href = url;
+    linkNode.setAttribute('data-id', '2');
+    linkNode.setAttribute('target', '_blank');
+    linkNode.setAttribute('rel', 'noopener noreferrer');
+    linkNode.textContent = title;
+
+    const parahraphNode = document.createElement('p');
+    parahraphNode.textContent = description;
+
+    const buttonNode = document.createElement('button');
+    buttonNode.type = 'button';
+    buttonNode.classList.add('btn', 'btn-primary', 'btn-sm', 'flex');
+    buttonNode.setAttribute('data-id', '2');
+    buttonNode.textContent = 'Show Post';
+
+    postNode.append(linkNode);
+    postNode.append(parahraphNode);
+    listNode.append(postNode);
+    postNode.append(buttonNode);
+  });
+  postsNode.append(headerPostNode);
+  postsNode.append(listNode);
 };
 
-const renderPosts = (value) => {
-  const posts = document.querySelector('.posts');
-  const foramtedPosts = value.map(
-    (post) => `<div>
-        <h3><a href='${post.link}'>${post.title}</a></h3>
-        <p>${post.description}</p>
-    </div>`
-  );
-  posts.innerHTML = foramtedPosts.join('');
-};
-
-const renderForm = (state, value, i18Instance) => {
-  const input = document.getElementById('url-input');
-  const button = document.querySelector('button[type="submit"]');
-  const errorBlock = document.getElementById('error-text');
-  const { setInputValue } = hooks(state);
-  switch (value) {
-    case 'initial':
-      input.classList.remove('border-danger');
-      input.focus();
-      break;
-    case 'pending':
-      setInputValue('');
-      button.disabled = true;
-      errorBlock.classList.remove('text-danger');
-      errorBlock.classList.add('text-info');
-      console.log(i18Instance.t('sending'));
-      errorBlock.textContent = i18Instance.t('sending');
-      break;
-    case 'loading':
-      errorBlock.textContent = i18Instance.t('loading');
-      break;
-    case 'success':
-      errorBlock.classList.remove('text-info');
-      errorBlock.classList.add('text-success');
-      errorBlock.textContent = i18Instance.t('successFeedback');
-      button.disabled = false;
-      break;
-    case 'error':
-      button.disabled = false;
-      errorBlock.classList.remove('text-succes');
-      errorBlock.classList.add('text-danger');
-      break;
-    default:
-      break;
+const renderForm = (status) => {
+  const formElement = document.querySelector('.rss-form');
+  const inputElement = formElement.querySelector('input');
+  const submitButton = formElement.querySelector('button');
+  if (status === 'pending') {
+    inputElement.setAttribute('readonly', true);
+    formElement.setAttribute('disabled', true);
+    submitButton.setAttribute('disabled', true);
+  } else {
+    inputElement.removeAttribute('readonly');
+    formElement.removeAttribute('disabled');
+    submitButton.removeAttribute('disabled');
   }
 };
 
-export { renderFormInput, renderForm, renderPosts };
+const renderFeedback = (feedback, i18nInstance) => {
+  const feedbackElement = document.querySelector('#feedback');
+  if (feedback === 'success') {
+    feedbackElement.textContent = i18nInstance.t('successFeedback');
+    feedbackElement.classList.remove('text-danger');
+    feedbackElement.classList.add('text-success');
+    return;
+  }
+  if (feedback instanceof Error) {
+    feedbackElement.textContent = i18nInstance.t(`errors.${feedback.message}`);
+    feedbackElement.classList.remove('text-success');
+    feedbackElement.classList.add('text-danger');
+  }
+};
+
+const renderFeeds = (feeds, i18Instance) => {
+  const feedsElement = document.querySelector('.feeds');
+
+  const headingElement = document.createElement('h2');
+  headingElement.textContent = i18Instance.t('feeds');
+
+  const listElement = document.createElement('ul');
+  listElement.classList.add('list-group', 'mb-5');
+
+  feedsElement.appendChild(headingElement);
+  feedsElement.appendChild(listElement);
+
+  feeds.forEach(({ title, description }) => {
+    const feedElement = document.createElement('li');
+    feedElement.classList.add('list-group-item');
+
+    const titleElement = document.createElement('h3');
+    titleElement.textContent = title;
+
+    const descriptionElement = document.createElement('p');
+    descriptionElement.textContent = description;
+
+    feedElement.appendChild(titleElement);
+    feedElement.appendChild(descriptionElement);
+    listElement.appendChild(feedElement);
+  });
+};
+
+export { renderForm, renderFeeds, renderPosts, renderFeedback };

@@ -14,14 +14,14 @@
           <p class="lead">
             Начните читать RSS сегодня! Это легко, это красиво.
           </p>
-          <form class="d-flex justify-content-center">
+          <form class="d-flex justify-content-center rss-form">
             <input
               id="url-input"
               autofocus=""
               required=""
               name="url"
               aria-label="url"
-              class="form-control w-100"
+              class="form-control w-100 mx-1"
               placeholder="ссылка RSS"
               autocomplete="off"
             />
@@ -32,20 +32,16 @@
           <p class="mt-2 text-muted">
             Пример: https://ru.hexlet.io/lessons.rss
           </p>
-          <p id="error-text" class="text-danger"></p>
+          <p id="feedback"></p>
         </div>
       </div>
     </div>
     <section class="container-fluid container-xxl p-20">
       <div class="row">
-        <div class="col-md-10 col-lg-8 order-1 mx-auto posts pt-lg-5">
-          Посты
-        </div>
+        <div class="col-md-10 col-lg-8 order-1 mx-auto posts pt-lg-5"></div>
         <div
           class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 pt-lg-5 feeds"
-        >
-          Фиды
-        </div>
+        ></div>
       </div>
     </section>
   </body>

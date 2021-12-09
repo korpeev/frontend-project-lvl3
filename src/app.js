@@ -1,11 +1,9 @@
-import axios from 'axios';
-import * as yup from 'yup';
 import getWatchedState from './watchedState';
-import hooks from './hooks';
+import validator from './utils/validator';
+import fetchData from './utils/fetchData';
 
 const startApp = (i18Instance) => {
   const defaultState = {
-    input: '',
     feeds: [],
     posts: [],
     error: '',
@@ -13,103 +11,77 @@ const startApp = (i18Instance) => {
       status: 'initial',
     },
   };
-  const { setErrorText, setInputValue } = hooks(defaultState);
-  // const route = {
-  //   api: (targetUrl) => {
-  //     const proxyUrl = new URL(
-  //       '/get',
-  //       'https://hexlet-allorigins.herokuapp.com'
-  //     );
-  //     proxyUrl.searchParams.set('url', targetUrl);
-  //     proxyUrl.searchParams.set('disableCache', true);
-  //     return proxyUrl.toString();
-  //   },
-  // };
-  const form = document.querySelector('form');
-  const erroBlock = document.getElementById('error-text');
-  console.log(erroBlock.textContent);
+  // Потом исправлю, почему то с прокси запрос не идет!!!
+  // const proxy = (url) =>
+  //   `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(
+  //     url
+  //   )}`;
+  const formElement = document.querySelector('form');
+  const inputElement = document.getElementById('url-input');
   const watchedState = getWatchedState(defaultState, i18Instance);
-  const fetchData = async (url) => {
-    try {
-      const response = await axios.get(url);
-      watchedState.form.status = 'loading';
-      if (!response.data.length) {
-        throw new Error('errors.network');
-      }
-      watchedState.form.status = 'success';
-      return response.data;
-    } catch (error) {
-      setErrorText(i18Instance.t('errors.network'));
-      watchedState.form.status = 'error';
-      erroBlock.textContent = defaultState.error;
-    }
-    return null;
-  };
-  const validationScheme = yup.object().shape({
-    url: yup.string().url().required(),
-  });
-  const validation = async (string) => {
-    try {
-      const valid = await validationScheme.validate({ url: string });
-      setInputValue(valid.url);
-      return valid;
-    } catch (error) {
-      watchedState.form.status = 'error';
-      setErrorText(i18Instance.t('errors.url'));
-      erroBlock.textContent = defaultState.error;
-      return null;
-    }
-  };
-  const parseRss = (string) => {
-    const parser = new DOMParser();
-    const rss = parser.parseFromString(string, 'text/xml');
-    const error = rss.querySelector('parsererror');
-    if (error) {
-      watchedState.form.status = 'error';
-      setErrorText(i18Instance.t('errors.rssNotFound'));
-      return { error };
-    }
-    return rss;
-  };
-  const buildRss = (document) => {
-    const { error } = document;
-    if (error) {
-      erroBlock.textContent = defaultState.error;
-      return;
-    }
 
-    const feeds = {
-      title: document.querySelector('title').textContent,
-      description: document.querySelector('description').textContent,
-    };
-    const items = document.querySelectorAll('channel item');
-    const newItems = Array.from(items).map((item) => {
-      const itemTitle = item.querySelector('title').textContent;
-      const itemDescr = item.querySelector('description').textContent;
-      const itemLink = item.querySelector('link').textContent;
-      return { title: itemTitle, description: itemDescr, link: itemLink };
-    });
-    watchedState.posts.push(...newItems);
-    watchedState.feeds.push(feeds);
+  const parseRss = (data) => {
+    try {
+      const parser = new DOMParser();
+      const rssDocument = parser.parseFromString(data, 'application/xml');
+      console.log(rssDocument.querySelector('rss'));
+      const elements = {
+        feeds: {
+          title: rssDocument.querySelector('channel title').textContent,
+          description: rssDocument.querySelector('channel description')
+            .textContent,
+          link: rssDocument.querySelector('channel link').textContent,
+        },
+        items: rssDocument.querySelectorAll('channel item'),
+      };
+      const posts = Array.from(elements.items).map((item) => ({
+        title: item.querySelector('title').textContent,
+        description: item.querySelector('description').textContent,
+        url: item.querySelector('link').textContent,
+        pubDate: new Date(item.querySelector('pubDate').textContent),
+      }));
+      return { ...elements.feeds, posts };
+    } catch (error) {
+      throw new Error('rssNotFound');
+    }
   };
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     watchedState.form.status = 'initial';
-    try {
-      watchedState.form.status = 'pending';
-      const formData = new FormData(form);
-      const url = formData.get('url');
-      const validationResult = await validation(url);
-      if (!validationResult) {
-        throw new Error('errors.url');
-      }
-      const data = await fetchData(url);
-      const parsedXml = parseRss(data);
-      buildRss(parsedXml);
-    } catch (error) {
-      setErrorText(error.message);
-    }
+    const formData = new FormData(e.target);
+    const url = formData.get('url');
+    validator(url, watchedState.feeds)
+      .then((link) => {
+        watchedState.error = null;
+        return link;
+      })
+      .then((link) => {
+        watchedState.form.status = 'pending';
+        return fetchData(link);
+      })
+      .then((response) => {
+        const { title, description, posts } = parseRss(response);
+        const id = Date.now();
+        watchedState.feeds.push({
+          title,
+          id,
+          description,
+          url,
+        });
+        const modifyPosts = [...posts.map((post) => ({ ...post, feedId: id }))];
+        watchedState.posts.push(...modifyPosts);
+        watchedState.form.status = 'success';
+        formElement.reset();
+        inputElement.classList.remove('is-invalid');
+        inputElement.focus();
+      })
+      .catch((error) => {
+        watchedState.form.status = 'error';
+        inputElement.classList.add('is-invalid');
+        watchedState.error = error;
+      });
   };
-  form.addEventListener('submit', handleSubmit);
+  formElement.addEventListener('submit', handleSubmit);
 };
 export default startApp;
