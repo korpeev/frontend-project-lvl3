@@ -1,8 +1,32 @@
+/* eslint-disable no-param-reassign */
+
+const renderModal = (post) => {
+  const modal = document.getElementById('modal');
+
+  const closeBtns = modal.querySelectorAll('button[data-dismiss="modal"]');
+  modal.classList.remove('remove');
+  modal.classList.add('show');
+  closeBtns.forEach((el) =>
+    el.addEventListener('click', () => {
+      modal.classList.add('remove');
+      modal.classList.remove('show');
+    })
+  );
+  const modalTitle = modal.querySelector('.modal-title');
+  const modalBody = modal.querySelector('.modal-body');
+  const linkBtn = modal.querySelector('.link');
+  const { title, description, url } = post;
+  modalTitle.textContent = title;
+  linkBtn.href = url;
+  modalBody.textContent = description;
+};
+
 const renderPosts = (posts, i18Instance) => {
   const postsNode = document.querySelector('.posts');
   // postsNode.innerHTML = '';
 
   const headerPostNode = document.createElement('h3');
+  headerPostNode.classList.add('fw-bold');
   headerPostNode.textContent = i18Instance.t('posts');
 
   const listNode = document.createElement('ul');
@@ -32,9 +56,13 @@ const renderPosts = (posts, i18Instance) => {
     const buttonNode = document.createElement('button');
     buttonNode.type = 'button';
     buttonNode.classList.add('btn', 'btn-primary', 'btn-sm', 'flex');
-    buttonNode.setAttribute('data-id', '2');
     buttonNode.textContent = 'Show Post';
 
+    buttonNode.onclick = () => {
+      renderModal({ title, description, url });
+      linkNode.classList.remove('fw-bold');
+      linkNode.classList.add('fw-normal');
+    };
     postNode.append(linkNode);
     postNode.append(parahraphNode);
     listNode.append(postNode);
@@ -102,4 +130,4 @@ const renderFeeds = (feeds, i18Instance) => {
   });
 };
 
-export { renderForm, renderFeeds, renderPosts, renderFeedback };
+export { renderForm, renderModal, renderFeeds, renderPosts, renderFeedback };

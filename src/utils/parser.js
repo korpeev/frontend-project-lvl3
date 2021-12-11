@@ -2,7 +2,6 @@ const parseRss = (data) => {
   try {
     const parser = new DOMParser();
     const rssDocument = parser.parseFromString(data, 'application/xml');
-    console.log(rssDocument.querySelector('rss'));
     const elements = {
       feeds: {
         title: rssDocument.querySelector('channel title').textContent,

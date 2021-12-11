@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import getWatchedState from './watchedState';
 import validator from './utils/validator';
 import fetchData, { FETCHING_TIMEOUT, fetchNewPosts } from './utils/fetchData';
@@ -11,6 +12,8 @@ const startApp = (i18Instance) => {
     form: {
       status: 'initial',
     },
+    openedPostId: null,
+    readedPost: null,
   };
 
   const formElement = document.querySelector('form');
@@ -33,14 +36,16 @@ const startApp = (i18Instance) => {
       })
       .then((response) => {
         const { title, description, posts } = parseRss(response);
-        const id = Date.now();
+        const id = uuidv4();
         watchedState.feeds.push({
           title,
           id,
           description,
           url,
         });
-        const modifyPosts = [...posts.map((post) => ({ ...post, feedId: id }))];
+        const modifyPosts = [
+          ...posts.map((post) => ({ ...post, feedId: id, id: uuidv4() })),
+        ];
         watchedState.posts.push(...modifyPosts);
         watchedState.form.status = 'success';
         formElement.reset();
