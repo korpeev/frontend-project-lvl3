@@ -1,6 +1,7 @@
 import getWatchedState from './watchedState';
 import validator from './utils/validator';
-import fetchData from './utils/fetchData';
+import fetchData, { FETCHING_TIMEOUT, fetchNewPosts } from './utils/fetchData';
+import parseRss from './utils/parser';
 
 const startApp = (i18Instance) => {
   const defaultState = {
@@ -11,40 +12,10 @@ const startApp = (i18Instance) => {
       status: 'initial',
     },
   };
-  // Потом исправлю, почему то с прокси запрос не идет!!!
-  // const proxy = (url) =>
-  //   `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(
-  //     url
-  //   )}`;
+
   const formElement = document.querySelector('form');
   const inputElement = document.getElementById('url-input');
   const watchedState = getWatchedState(defaultState, i18Instance);
-
-  const parseRss = (data) => {
-    try {
-      const parser = new DOMParser();
-      const rssDocument = parser.parseFromString(data, 'application/xml');
-      console.log(rssDocument.querySelector('rss'));
-      const elements = {
-        feeds: {
-          title: rssDocument.querySelector('channel title').textContent,
-          description: rssDocument.querySelector('channel description')
-            .textContent,
-          link: rssDocument.querySelector('channel link').textContent,
-        },
-        items: rssDocument.querySelectorAll('channel item'),
-      };
-      const posts = Array.from(elements.items).map((item) => ({
-        title: item.querySelector('title').textContent,
-        description: item.querySelector('description').textContent,
-        url: item.querySelector('link').textContent,
-        pubDate: new Date(item.querySelector('pubDate').textContent),
-      }));
-      return { ...elements.feeds, posts };
-    } catch (error) {
-      throw new Error('rssNotFound');
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,5 +54,6 @@ const startApp = (i18Instance) => {
       });
   };
   formElement.addEventListener('submit', handleSubmit);
+  setTimeout(() => fetchNewPosts(watchedState), FETCHING_TIMEOUT);
 };
 export default startApp;
