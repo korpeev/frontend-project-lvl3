@@ -4,18 +4,15 @@ import startApp from './app.js';
 import resources from './locale/index.js';
 import yupLocale from './locale/yup.js';
 
-const init = () => {
+const init = async () => {
   const i18Instance = i18next.createInstance();
-  i18Instance
-    .init({
-      lng: 'ru',
-      resources,
-    })
-    .then(() => {
-      setLocale(yupLocale);
-      startApp(i18Instance);
-    })
-    .catch(console.log);
+  try {
+    await i18Instance.init({ lng: 'ru', debug: true, resources });
+    setLocale(yupLocale);
+    startApp(i18Instance);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default init;
