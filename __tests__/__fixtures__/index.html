@@ -1,0 +1,67 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button
+          type="button"
+          data-dismiss="modal"
+          class="close"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <a
+          class="btn btn-primary link"
+          href="#"
+          role="button"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Читать полностью </a
+        ><button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Закрыть
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid bg-dark p-5">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 mx-auto text-white">
+      <h1 class="display-3">RSS Аггрегатор</h1>
+      <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
+      <form
+        class="d-flex justify-content-center rss-form"
+        data-testid="rss-form"
+      >
+        <input
+          id="url-input"
+          name="url"
+          aria-label="url"
+          class="form-control w-100 mx-1"
+          placeholder="ссылка RSS"
+          autocomplete="off"
+          data-testid="url-input"
+        />
+        <button type="submit" class="h-100 btn btn-lg btn-primary px-sm-5">
+          Добавить
+        </button>
+      </form>
+      <p class="mt-2 text-muted">Пример: https://ru.hexlet.io/lessons.rss</p>
+      <p id="feedback" data-testid="feedback"></p>
+    </div>
+  </div>
+</div>
+<section class="container-fluid container-xxl p-20">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 order-1 mx-auto posts pt-lg-5"></div>
+    <div
+      class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 pt-lg-5 feeds"
+    ></div>
+  </div>
+</section>

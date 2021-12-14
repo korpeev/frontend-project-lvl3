@@ -45,7 +45,6 @@ const renderPosts = (posts, i18Instance) => {
     const linkNode = document.createElement('a');
     linkNode.classList.add('fw-bold');
     linkNode.href = url;
-    linkNode.setAttribute('data-id', '2');
     linkNode.setAttribute('target', '_blank');
     linkNode.setAttribute('rel', 'noopener noreferrer');
     linkNode.textContent = title;
@@ -56,7 +55,7 @@ const renderPosts = (posts, i18Instance) => {
     const buttonNode = document.createElement('button');
     buttonNode.type = 'button';
     buttonNode.classList.add('btn', 'btn-primary', 'btn-sm', 'flex');
-    buttonNode.textContent = 'Show Post';
+    buttonNode.textContent = i18Instance.t('openModalBtn');
 
     buttonNode.onclick = () => {
       renderModal({ title, description, url });
@@ -72,33 +71,42 @@ const renderPosts = (posts, i18Instance) => {
   postsNode.append(listNode);
 };
 
-const renderForm = (status) => {
-  const formElement = document.querySelector('.rss-form');
-  const inputElement = formElement.querySelector('input');
-  const submitButton = formElement.querySelector('button');
-  if (status === 'pending') {
-    inputElement.setAttribute('readonly', true);
-    formElement.setAttribute('disabled', true);
-    submitButton.setAttribute('disabled', true);
-  } else {
-    inputElement.removeAttribute('readonly');
-    formElement.removeAttribute('disabled');
-    submitButton.removeAttribute('disabled');
-  }
-};
-
-const renderFeedback = (feedback, i18nInstance) => {
+const renderFeedback = (feedback, i18nextInstance) => {
   const feedbackElement = document.querySelector('#feedback');
   if (feedback === 'success') {
-    feedbackElement.textContent = i18nInstance.t('successFeedback');
+    feedbackElement.textContent = i18nextInstance.t('successFeedback');
     feedbackElement.classList.remove('text-danger');
     feedbackElement.classList.add('text-success');
     return;
   }
   if (feedback instanceof Error) {
-    feedbackElement.textContent = i18nInstance.t(`errors.${feedback.message}`);
+    feedbackElement.textContent = i18nextInstance.t(
+      `errors.${feedback.message}`
+    );
     feedbackElement.classList.remove('text-success');
     feedbackElement.classList.add('text-danger');
+  }
+};
+
+const renderForm = (status, i18nInstance) => {
+  const feedbackElement = document.querySelector('#feedback');
+  const formElement = document.querySelector('.rss-form');
+  const inputElement = formElement.querySelector('input');
+  const submitButton = formElement.querySelector('button');
+  if (!inputElement.value) {
+    feedbackElement.textContent = i18nInstance.t('errors.required');
+  }
+  if (status === 'pending') {
+    inputElement.setAttribute('readonly', true);
+    formElement.setAttribute('disabled', true);
+    submitButton.setAttribute('disabled', true);
+    feedbackElement.classList.remove('text-danger');
+    feedbackElement.classList.add('text-success');
+    feedbackElement.textContent = i18nInstance.t('loading');
+  } else {
+    inputElement.removeAttribute('readonly');
+    formElement.removeAttribute('disabled');
+    submitButton.removeAttribute('disabled');
   }
 };
 

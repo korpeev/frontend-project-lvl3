@@ -1,21 +1,24 @@
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
-import parseRss from './parser';
+import parseRss from './parser.js';
 
-// const route = {
-//   api: (url) => {
-//     const endPoint = new URL('/get', 'https://hexlet-allorigins.herokuapp.com');
-//     endPoint.searchParams.set('disableCache', 'true');
-//     endPoint.searchParams.set('url', url);
-//     return endPoint.toString();
-//   },
-// };
+const route = {
+  api: (url) => {
+    const endPoint = new URL(
+      '/get',
+      'https://hexlet-allorigins.herokuapp.com/'
+    );
+    endPoint.searchParams.set('disableCache', true);
+    endPoint.searchParams.set('url', url);
+    return endPoint.toString();
+  },
+};
 
 const fetchData = async (url) => {
   try {
     // const proxifiedUrl = route.api(url);
-    const response = await axios.get(url);
-
+    const response = await axios.get(route.api(url));
     return response.data;
   } catch (error) {
     throw new Error('network');
@@ -37,14 +40,16 @@ export const fetchNewPosts = (watchedState) => {
           (post) => post.feedId === feed.id
         );
         const posts = _.differenceBy(newPosts, oldPosts, 'title').map(
-          (post) => ({ ...post, id: new Date() })
+          (post) => ({ ...post, id: uuidv4() })
         );
         if (posts.length > 0) {
-          watchedState.posts.push(posts);
+          watchedState.posts.unshift(posts);
           console.log('new posts');
         }
       })
-      .catch(console.error)
+      .catch(() => {
+        throw new Error('network');
+      })
   );
 
   Promise.all(promises).finally(() => {

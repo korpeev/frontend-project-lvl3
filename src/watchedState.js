@@ -2,10 +2,10 @@ import onChange from 'on-change';
 import {
   renderForm,
   renderPosts,
-  renderFeedback,
   renderFeeds,
   renderModal,
-} from './render';
+  renderFeedback,
+} from './render.js';
 
 const getWatchedState = (state, i18Instance) =>
   onChange(state, (path, value) => {
@@ -15,7 +15,7 @@ const getWatchedState = (state, i18Instance) =>
         break;
       }
       case 'form.status': {
-        renderForm(value);
+        renderForm(value, i18Instance);
         renderFeedback(value, i18Instance);
         break;
       }
@@ -26,7 +26,6 @@ const getWatchedState = (state, i18Instance) =>
         renderFeeds(value, i18Instance);
         break;
       case 'openedPostId':
-        console.log(path, value);
         renderModal(state, value);
         break;
       default:

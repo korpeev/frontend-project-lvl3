@@ -1,4 +1,3 @@
-import en from './en';
-import ru from './ru';
+import ru from './ru.js';
 
-export default { ru, en };
+export default { ru };

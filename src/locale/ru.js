@@ -9,7 +9,6 @@ export default {
     },
     successFeedback: 'RSS успешно загружен',
     loading: 'Загрузка',
-    sending: 'Отправка запроса',
     openModalBtn: 'Просмотр',
     posts: 'Посты',
     feeds: 'Фиды',

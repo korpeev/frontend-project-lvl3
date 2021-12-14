@@ -1,8 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
-import getWatchedState from './watchedState';
-import validator from './utils/validator';
-import fetchData, { FETCHING_TIMEOUT, fetchNewPosts } from './utils/fetchData';
-import parseRss from './utils/parser';
+import getWatchedState from './watchedState.js';
+import validator from './utils/validator.js';
+import fetchData, {
+  FETCHING_TIMEOUT,
+  fetchNewPosts,
+} from './utils/fetchData.js';
+import parseRss from './utils/parser.js';
 
 const startApp = (i18Instance) => {
   const defaultState = {
@@ -32,7 +35,8 @@ const startApp = (i18Instance) => {
       })
       .then((link) => {
         watchedState.form.status = 'pending';
-        return fetchData(link);
+        inputElement.classList.remove('is-invalid');
+        return fetchData(link.trim());
       })
       .then((response) => {
         const { title, description, posts } = parseRss(response);
