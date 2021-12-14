@@ -6,6 +6,7 @@ export default {
       rssNotFound: 'Ресурс не содержит валидный RSS',
       network: 'Ошибка сети',
       duplicate: 'RSS уже существует',
+      uknownError: 'Неизвестная ошибка',
     },
     successFeedback: 'RSS успешно загружен',
     loading: 'Загрузка',

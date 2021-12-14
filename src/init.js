@@ -14,6 +14,9 @@ const init = () => {
     .then(() => {
       setLocale(yupLocale);
       startApp(i18Instance);
+    })
+    .catch(() => {
+      throw Error('errors.uknownError');
     });
 };
 
