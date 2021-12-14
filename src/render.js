@@ -90,7 +90,7 @@ const renderFeedback = (feedback, i18nextInstance) => {
 
 const renderForm = (status, i18nInstance) => {
   const feedbackElement = document.querySelector('#feedback');
-  const formElement = document.querySelector('.rss-form');
+  const formElement = document.querySelector('#rss-form');
   const inputElement = formElement.querySelector('input');
   const submitButton = formElement.querySelector('button');
   if (!inputElement.value) {
