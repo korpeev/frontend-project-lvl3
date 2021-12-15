@@ -1,6 +1,6 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
+export default {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     polyfill: '@babel/polyfill',
