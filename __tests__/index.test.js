@@ -55,23 +55,23 @@ test('invalid format', async () => {
   );
 });
 // Потом исправлю, почему то прокси не работает у меня!!
-// test('valid rss and duplicate', async () => {
-//   const validRSS = fs.readFileSync(getFixturePath('lessons.xml')).toString();
-//   nock('https://hexlet-allorigins.herokuapp.com')
-//     .get((uri) => {
-//       uri.includes('get');
-//       console.log(uri);
-//     })
-//     .reply(200, { contents: validRSS }, nockHeaders);
+test('valid rss and duplicate', async () => {
+  const validRSS = fs.readFileSync(getFixturePath('lessons.xml')).toString();
+  nock('https://hexlet-allorigins.herokuapp.com')
+    .get((uri) => {
+      uri.includes('get');
+      console.log(uri);
+    })
+    .reply(200, { contents: validRSS }, nockHeaders);
 
-//   fireEvent.input(elements.input, {
-//     target: { value: 'https://ru.hexlet.io/lessons.rss' },
-//   });
-//   fireEvent.submit(elements.form);
-//   await waitFor(() => expect(screen.getByText('RSS успешно загружен')));
-//   fireEvent.input(elements.input, {
-//     target: { value: 'https://ru.hexlet.io/lessons.rss' },
-//   });
-//   fireEvent.submit(elements.form);
-//   await waitFor(() => expect(screen.getByText('RSS уже существует')));
-// });
+  fireEvent.input(elements.input, {
+    target: { value: 'https://ru.hexlet.io/lessons.rss' },
+  });
+  fireEvent.submit(elements.form);
+  await waitFor(() => expect(screen.getByText('RSS успешно загружен')));
+  fireEvent.input(elements.input, {
+    target: { value: 'https://ru.hexlet.io/lessons.rss' },
+  });
+  fireEvent.submit(elements.form);
+  await waitFor(() => expect(screen.getByText('RSS уже существует')));
+});

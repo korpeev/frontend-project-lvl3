@@ -19,8 +19,8 @@ const startApp = (i18Instance) => {
     readedPost: null,
   };
 
-  const formElement = document.getElementById('rss-form');
-  const inputElement = document.getElementById('url-input');
+  const formElement = document.querySelector('form');
+  const inputElement = formElement.querySelector('input');
   const watchedState = getWatchedState(defaultState, i18Instance);
   console.log(formElement);
   const handleSubmit = (e) => {
