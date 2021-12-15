@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import { setLocale } from 'yup';
-import startApp from './app.js';
+import app from './app.js';
 import resources from './locale/index.js';
 import yupLocale from './locale/yup.js';
 
@@ -9,7 +9,7 @@ const init = async () => {
   try {
     await i18Instance.init({ lng: 'ru', debug: true, resources });
     setLocale(yupLocale);
-    startApp(i18Instance);
+    app(i18Instance);
   } catch (error) {
     console.log(error);
   }

@@ -22,7 +22,7 @@ const startApp = (i18Instance) => {
   const formElement = document.getElementById('rss-form');
   const inputElement = document.getElementById('url-input');
   const watchedState = getWatchedState(defaultState, i18Instance);
-
+  console.log(formElement);
   const handleSubmit = (e) => {
     e.preventDefault();
     watchedState.form.status = 'initial';
