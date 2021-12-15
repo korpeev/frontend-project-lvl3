@@ -1,4 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
+import i18next from 'i18next';
+import { setLocale } from 'yup';
+import resources from './locale/index.js';
+import yupLocale from './locale/yup.js';
 import getWatchedState from './watchedState.js';
 import validator from './utils/validator.js';
 import fetchData, {
@@ -7,7 +11,10 @@ import fetchData, {
 } from './utils/fetchData.js';
 import parseRss from './utils/parser.js';
 
-const startApp = (i18Instance) => {
+export default async () => {
+  const i18Instance = i18next.createInstance();
+  await i18Instance.init({ lng: 'ru', debug: true, resources });
+  setLocale(yupLocale);
   const defaultState = {
     feeds: [],
     posts: [],
@@ -64,4 +71,3 @@ const startApp = (i18Instance) => {
   formElement.addEventListener('submit', handleSubmit);
   setTimeout(() => fetchNewPosts(watchedState), FETCHING_TIMEOUT);
 };
-export default startApp;

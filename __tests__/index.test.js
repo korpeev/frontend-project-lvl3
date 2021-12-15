@@ -6,7 +6,7 @@ import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import nock from 'nock';
-import init from '../src/init.js';
+import app from '../src/app.js';
 
 const { screen, waitFor, fireEvent } = testingLibrary;
 const __filename = fileURLToPath(import.meta.url);
@@ -18,7 +18,7 @@ let elements;
 beforeEach(() => {
   const initHtml = fs.readFileSync(getFixturePath('index.html')).toString();
   document.body.innerHTML = initHtml;
-  init();
+  app();
   elements = {
     input: screen.getByTestId('url-input'),
     form: screen.getByTestId('rss-form'),
