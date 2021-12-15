@@ -22,7 +22,6 @@ const startApp = (i18Instance) => {
   const formElement = document.querySelector('form');
   const inputElement = formElement.querySelector('input');
   const watchedState = getWatchedState(defaultState, i18Instance);
-  console.log(formElement);
   const handleSubmit = (e) => {
     e.preventDefault();
     watchedState.form.status = 'initial';

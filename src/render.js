@@ -93,7 +93,7 @@ const renderForm = (status, i18nInstance) => {
   const formElement = document.querySelector('form');
   const inputElement = formElement.querySelector('input');
   const submitButton = formElement.querySelector('button');
-  if (!inputElement.value) {
+  if (!inputElement.value.trim().length) {
     feedbackElement.textContent = i18nInstance.t('errors.required');
   }
   if (status === 'pending') {

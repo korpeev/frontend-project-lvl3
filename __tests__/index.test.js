@@ -15,9 +15,6 @@ const getFixturePath = (filename) =>
   path.resolve(__dirname, '__fixtures__', filename);
 
 let elements;
-const nockHeaders = {
-  'Access-Control-Allow-Origin': '*',
-};
 beforeEach(() => {
   const initHtml = fs.readFileSync(getFixturePath('index.html')).toString();
   document.body.innerHTML = initHtml;
@@ -39,12 +36,15 @@ test('invalid url', async () => {
 
 test('invalid format', async () => {
   nock('https://hexlet-allorigins.herokuapp.com')
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+    })
     .get(
       `/get?disableCache=true&url=${encodeURIComponent(
         'https://www.google.com/'
       )}`
     )
-    .reply(200, { contents: 'FizzBuzz' }, nockHeaders);
+    .reply(200, { contents: 'FizzBuzz' });
 
   fireEvent.input(elements.input, {
     target: { value: 'https://www.google.com/' },
@@ -57,20 +57,24 @@ test('invalid format', async () => {
 // Потом исправлю, почему то прокси не работает у меня!!
 test('valid rss and duplicate', async () => {
   const validRSS = fs.readFileSync(getFixturePath('lessons.xml')).toString();
-  nock('https://hexlet-allorigins.herokuapp.com')
-    .get((uri) => {
-      uri.includes('get');
-      console.log(uri);
+  const nockFetch = nock('https://hexlet-allorigins.herokuapp.com')
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
     })
-    .reply(200, { contents: validRSS }, nockHeaders);
-
+    .get((uri) => uri.includes('get'))
+    .reply(200, { data: validRSS });
+  console.log(nockFetch);
   fireEvent.input(elements.input, {
-    target: { value: 'https://ru.hexlet.io/lessons.rss' },
+    target: {
+      value: 'https://news.google.com/rss?topic=h&hl=en-US&gl=US&ceid=US:en',
+    },
   });
   fireEvent.submit(elements.form);
   await waitFor(() => expect(screen.getByText('RSS успешно загружен')));
   fireEvent.input(elements.input, {
-    target: { value: 'https://ru.hexlet.io/lessons.rss' },
+    target: {
+      value: 'https://news.google.com/rss?topic=h&hl=en-US&gl=US&ceid=US:en',
+    },
   });
   fireEvent.submit(elements.form);
   await waitFor(() => expect(screen.getByText('RSS уже существует')));

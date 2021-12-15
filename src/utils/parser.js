@@ -2,6 +2,10 @@ const parseRss = (data) => {
   try {
     const parser = new DOMParser();
     const rssDocument = parser.parseFromString(data, 'application/xml');
+    const error = rssDocument.querySelector('parsererror');
+    if (error) {
+      throw new Error('rssNotFound');
+    }
     const elements = {
       feeds: {
         title: rssDocument.querySelector('channel title').textContent,
@@ -19,7 +23,7 @@ const parseRss = (data) => {
     }));
     return { ...elements.feeds, posts };
   } catch (error) {
-    throw new Error('rssNotFound');
+    throw new Error(error.message);
   }
 };
 
