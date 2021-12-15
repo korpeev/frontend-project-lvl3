@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "RSS Agregator web site",
-  "main": "./src/index.js",
+  "main": "./src/app.js",
   "scripts": {
     "test": "npx jest --env=jsdom",
     "start": "webpack serve",
