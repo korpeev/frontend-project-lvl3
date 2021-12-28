@@ -6,25 +6,60 @@
     <link>https://ru.hexlet.io/</link>
     <webMaster>info@hexlet.io</webMaster>
     <item>
-      <title>Название урока / Основы тестирования программного обеспечения</title>
-      <guid isPermaLink="false">2195</guid>
-      <link>https://ru.hexlet.io/courses/software-testing-basics/lessons/first_lesson/theory_unit</link>
-      <description>Цель: Описание урока</description>
-      <pubDate>Fri, 05 Nov 2021 19:12:56 +0300</pubDate>
+      <title>Spring lifecycle / Java: Корпоративные приложения на Spring Boot</title>
+      <guid isPermaLink="false">2309</guid>
+      <link>https://ru.hexlet.io/courses/java-spring/lessons/spring-lifecycle/theory_unit</link>
+      <description>Цель: Узнать о том, как фреймворк Spring создаёт и уничтожает бины</description>
+      <pubDate>Mon, 27 Dec 2021 16:34:03 +0500</pubDate>
     </item>
     <item>
-      <title>REST API / Java: Веб-технологии</title>
-      <guid isPermaLink="false">2194</guid>
-      <link>https://ru.hexlet.io/courses/java-web/lessons/rest-api/theory_unit</link>
-      <description>Цель: Познакомиться с концепцией механизма REST</description>
-      <pubDate>Mon, 01 Nov 2021 12:10:30 +0300</pubDate>
+      <title>Очереди / Java: Корпоративные приложения на Spring Boot</title>
+      <guid isPermaLink="false">2308</guid>
+      <link>https://ru.hexlet.io/courses/java-spring/lessons/queues/theory_unit</link>
+      <description>Цель: Научится работать с очередями сообщений</description>
+      <pubDate>Mon, 27 Dec 2021 16:33:59 +0500</pubDate>
     </item>
     <item>
-      <title>Validation / Java: Веб-технологии</title>
-      <guid isPermaLink="false">2193</guid>
-      <link>https://ru.hexlet.io/courses/java-web/lessons/validation/theory_unit</link>
-      <description>Цель: Познакомиться с валидацией данных во фреймворке Javalin</description>
-      <pubDate>Mon, 01 Nov 2021 12:10:26 +0300</pubDate>
+      <title>Работа со строками как с массивами / Java: Массивы</title>
+      <guid isPermaLink="false">1369</guid>
+      <link>https://ru.hexlet.io/courses/java-arrays/lessons/strings/theory_unit</link>
+      <description>Цель: Научиться работать со строками</description>
+      <pubDate>Fri, 24 Dec 2021 08:44:46 +0500</pubDate>
+    </item>
+    <item>
+      <title>Сборка проекта / Java: Основы программирования</title>
+      <guid isPermaLink="false">2307</guid>
+      <link>https://ru.hexlet.io/courses/java-basics/lessons/building/theory_unit</link>
+      <description>Цель: Познакомиться с системами сборки проекта</description>
+      <pubDate>Fri, 24 Dec 2021 08:41:25 +0500</pubDate>
+    </item>
+    <item>
+      <title>Пакеты / Java: Основы программирования</title>
+      <guid isPermaLink="false">2306</guid>
+      <link>https://ru.hexlet.io/courses/java-basics/lessons/packages/theory_unit</link>
+      <description>Цель: Научиться организовывать свой код в виде пакетов</description>
+      <pubDate>Fri, 24 Dec 2021 08:41:23 +0500</pubDate>
+    </item>
+    <item>
+      <title>Классы / Java: Основы программирования</title>
+      <guid isPermaLink="false">2305</guid>
+      <link>https://ru.hexlet.io/courses/java-basics/lessons/classes/theory_unit</link>
+      <description>Цель: Узнать, что такое класс и как его использовать.</description>
+      <pubDate>Fri, 24 Dec 2021 08:41:21 +0500</pubDate>
+    </item>
+    <item>
+      <title>Отладка / Java: Основы программирования</title>
+      <guid isPermaLink="false">2304</guid>
+      <link>https://ru.hexlet.io/courses/java-basics/lessons/debug/theory_unit</link>
+      <description>Цель: Научиться отлаживать код.</description>
+      <pubDate>Fri, 24 Dec 2021 08:41:18 +0500</pubDate>
+    </item>
+    <item>
+      <title>Настройка окружения / Java: Основы программирования</title>
+      <guid isPermaLink="false">2303</guid>
+      <link>https://ru.hexlet.io/courses/java-basics/lessons/setup-environment/theory_unit</link>
+      <description>Цель: Научиться разворачивать окружения для разработки.</description>
+      <pubDate>Fri, 24 Dec 2021 08:41:16 +0500</pubDate>
     </item>
   </channel>
 </rss>
