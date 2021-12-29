@@ -60,7 +60,6 @@ test("valid rss and duplicate", async () => {
 	nock("https://hexlet-allorigins.herokuapp.com")
 		.defaultReplyHeaders({
 			"access-control-allow-origin": "*",
-			"access-control-allow-credentials": "true",
 		})
 		.get(
 			`/get?disableCache=true&url=${encodeURIComponent(

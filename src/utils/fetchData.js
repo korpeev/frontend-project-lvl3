@@ -7,6 +7,7 @@ const proxyfy = (url) =>
 	new URL(
 		`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${url}`
 	).toString()
+
 const fetchData = async (url) => {
 	try {
 		const response = await axios.get(proxyfy(url))

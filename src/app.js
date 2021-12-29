@@ -13,7 +13,7 @@ import parseRss from "./utils/parser.js"
 
 export default async () => {
 	const i18Instance = i18next.createInstance()
-	await i18Instance.init({ lng: "ru", debug: true, resources })
+	await i18Instance.init({ lng: "ru", debug: false, resources })
 	setLocale(yupLocale)
 	const defaultState = {
 		feeds: [],
