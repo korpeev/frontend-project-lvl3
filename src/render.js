@@ -69,57 +69,35 @@ const renderPosts = ({ posts, readedPost }, i18Instance) => {
 
 const renderFeedback = (status, i18nextInstance, proccesState) => {
 	const feedbackElement = document.querySelector("#feedback")
+	const sumbitButton = document.querySelector('button[type="submit"]')
+	const input = document.querySelector("#url-input")
 	switch (status) {
 		case "error": {
 			feedbackElement.textContent = i18nextInstance.t(proccesState)
 			feedbackElement.classList.remove("text-success")
 			feedbackElement.classList.add("text-danger")
+			sumbitButton.removeAttribute("disabled")
+			input.removeAttribute("readonly")
 			break
 		}
 		case "loading": {
 			feedbackElement.textContent = i18nextInstance.t(proccesState)
 			feedbackElement.classList.remove("text-danger")
 			feedbackElement.classList.add("text-success")
+			sumbitButton.setAttribute("disabled", true)
+			input.setAttribute("readonly", true)
 			break
 		}
 		case "success": {
 			feedbackElement.textContent = i18nextInstance.t(proccesState)
 			feedbackElement.classList.remove("text-danger")
 			feedbackElement.classList.add("text-success")
+			sumbitButton.removeAttribute("disabled")
+			input.removeAttribute("readonly")
 			break
 		}
 		default:
 			break
-	}
-	// if (feedback === "success") {
-	// 	feedbackElement.textContent = i18nextInstance.t("successFeedback")
-	// 	feedbackElement.classList.remove("text-danger")
-	// 	feedbackElement.classList.add("text-success")
-	// 	return
-	// }
-	// if (feedback instanceof Error) {
-	// 	feedbackElement.textContent = i18nextInstance.t(
-	// 		`errors.${feedback.message}`
-	// 	)
-	// 	feedbackElement.classList.remove("text-success")
-	// 	feedbackElement.classList.add("text-danger")
-	// }
-}
-const renderError = (value, i18Instance, proccesState) => {
-	renderFeedback(value, i18Instance, proccesState)
-}
-const renderForm = (status) => {
-	const formElement = document.querySelector("form")
-	const inputElement = formElement.querySelector("input")
-	const submitButton = formElement.querySelector("button")
-	if (status) {
-		inputElement.setAttribute("readonly", true)
-		formElement.setAttribute("disabled", true)
-		submitButton.setAttribute("disabled", true)
-	} else {
-		inputElement.removeAttribute("readonly")
-		formElement.removeAttribute("disabled")
-		submitButton.removeAttribute("disabled")
 	}
 }
 
@@ -151,4 +129,4 @@ const renderFeeds = (feeds, i18Instance) => {
 	})
 }
 
-export { renderForm, renderFeeds, renderPosts, renderFeedback, renderError }
+export { renderFeeds, renderPosts, renderFeedback }

@@ -1,29 +1,21 @@
 import onChange from "on-change"
-import {
-	renderForm,
-	renderPosts,
-	renderFeeds,
-	renderFeedback,
-	renderError,
-} from "./render.js"
+import { renderPosts, renderFeeds, renderFeedback } from "./render.js"
 
 const getWatchedState = (state, i18Instance) =>
 	onChange(state, (path, value) => {
 		if (path === "form.isValid") {
 			if (!value) {
-				renderError(state.error, i18Instance)
-				renderForm(value, i18Instance)
+				renderFeedback("error", i18Instance, state.proccesState)
 			}
 		}
 		if (path === "addingPosts") {
 			switch (value) {
 				case "loading": {
 					renderFeedback(value, i18Instance, state.proccesState)
-
 					break
 				}
 				case "error": {
-					renderError(value, i18Instance, state.proccesState)
+					renderFeedback(value, i18Instance, state.proccesState)
 					break
 				}
 				case "success": {
@@ -33,7 +25,7 @@ const getWatchedState = (state, i18Instance) =>
 					break
 				}
 				default:
-					renderError(value, i18Instance, state.proccesState)
+					throw Error("Something went wrong")
 			}
 		}
 	})
