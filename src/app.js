@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import i18next from "i18next"
+import axios from "axios"
 import { setLocale } from "yup"
 import resources from "./locale/index.js"
 import yupLocale from "./locale/yup.js"
@@ -75,6 +76,10 @@ export default async () => {
 				}
 				if (error.isRssParseError) {
 					watchedState.proccesState = "errors.rssNotFound"
+					watchedState.addingPosts = "error"
+				}
+				if (axios.isAxiosError(error)) {
+					watchedState.proccesState = "errors.network"
 					watchedState.addingPosts = "error"
 				}
 			})
