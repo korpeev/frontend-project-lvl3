@@ -1,9 +1,12 @@
 const parseRss = (data) => {
 	const parser = new DOMParser()
 	const rssDocument = parser.parseFromString(data, "application/xml")
-	const parserError = rssDocument.querySelector("parsererror")
-	if (parserError) {
-		throw new Error("rssNotFound")
+	const parseError = rssDocument.querySelector("parsererror")
+	if (parseError) {
+		const textError = parseError.textContent
+		const error = new Error(textError)
+		error.isRssParseError = true
+		throw error
 	}
 	const elements = {
 		feeds: {

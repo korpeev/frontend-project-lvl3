@@ -19,11 +19,12 @@ export default async () => {
 		feeds: [],
 		posts: [],
 		error: "",
+		addingPosts: "",
+		proccesState: "",
 		form: {
-			status: "initial",
+			isValid: null,
 		},
-		openedPostId: null,
-		readedPost: null,
+		readedPost: [],
 	}
 
 	const formElement = document.querySelector("form")
@@ -31,21 +32,22 @@ export default async () => {
 	const watchedState = getWatchedState(defaultState, i18Instance)
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		watchedState.form.status = "initial"
 		const formData = new FormData(e.target)
 		const url = formData.get("url")
+		watchedState.form.isValid = true
 		validator(url, watchedState.feeds)
 			.then((link) => {
 				watchedState.error = null
 				return link
 			})
 			.then((link) => {
-				watchedState.form.status = "pending"
+				watchedState.proccesState = "loading"
+				watchedState.addingPosts = "loading"
 				inputElement.classList.remove("is-invalid")
 				return fetchData(link)
 			})
 			.then((response) => {
-				const { title, description, posts } = parseRss(response)
+				const { title, description, posts } = parseRss(response.data.contents)
 				const id = uuidv4()
 				watchedState.feeds.push({
 					title,
@@ -57,17 +59,27 @@ export default async () => {
 					...posts.map((post) => ({ ...post, feedId: id, id: uuidv4() })),
 				]
 				watchedState.posts.push(...modifyPosts)
-				watchedState.form.status = "success"
+				watchedState.proccesState = "success"
+				watchedState.addingPosts = "success"
 				formElement.reset()
 				inputElement.classList.remove("is-invalid")
 				inputElement.focus()
 			})
 			.catch((error) => {
-				watchedState.form.status = "error"
-				inputElement.classList.add("is-invalid")
-				watchedState.error = error
+				if (error.name === "ValidationError") {
+					watchedState.proccesState = error.message
+					watchedState.addingPosts = "error"
+					watchedState.form.isValid = false
+					watchedState.error = error.error
+					inputElement.classList.add("is-invalid")
+				}
+				if (error.isRssParseError) {
+					watchedState.proccesState = "errors.rssNotFound"
+					watchedState.addingPosts = "error"
+				}
 			})
 	}
+
 	formElement.addEventListener("submit", handleSubmit)
 	setTimeout(() => fetchNewPosts(watchedState), FETCHING_TIMEOUT)
 }

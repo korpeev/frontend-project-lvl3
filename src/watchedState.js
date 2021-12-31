@@ -3,33 +3,38 @@ import {
 	renderForm,
 	renderPosts,
 	renderFeeds,
-	renderModal,
 	renderFeedback,
+	renderError,
 } from "./render.js"
 
 const getWatchedState = (state, i18Instance) =>
 	onChange(state, (path, value) => {
-		switch (path) {
-			case "posts": {
-				renderPosts(value, i18Instance, state)
-				break
-			}
-			case "form.status": {
+		if (path === "form.isValid") {
+			if (!value) {
+				renderError(state.error, i18Instance)
 				renderForm(value, i18Instance)
-				renderFeedback(value, i18Instance)
-				break
 			}
-			case "error":
-				renderFeedback(value, i18Instance)
-				break
-			case "feeds":
-				renderFeeds(value, i18Instance)
-				break
-			case "openedPostId":
-				renderModal(state, value)
-				break
-			default:
-				break
+		}
+		if (path === "addingPosts") {
+			switch (value) {
+				case "loading": {
+					renderFeedback(value, i18Instance, state.proccesState)
+
+					break
+				}
+				case "error": {
+					renderError(value, i18Instance, state.proccesState)
+					break
+				}
+				case "success": {
+					renderFeedback(value, i18Instance, state.proccesState)
+					renderFeeds(state.feeds, i18Instance)
+					renderPosts(state, i18Instance)
+					break
+				}
+				default:
+					renderError(value, i18Instance, state.proccesState)
+			}
 		}
 	})
 

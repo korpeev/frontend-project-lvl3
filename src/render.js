@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-const renderModal = (post) => {
+const renderModal = (post, readedPost) => {
 	const modal = document.getElementById("modal")
 
 	const closeBtns = modal.querySelectorAll('button[data-dismiss="modal"]')
@@ -18,10 +18,11 @@ const renderModal = (post) => {
 	const { title, description, url } = post
 	modalTitle.textContent = title
 	linkBtn.href = url
-	modalBody.innerHTML = description
+	modalBody.append(description)
+	readedPost.push(post.id)
 }
 
-const renderPosts = (posts, i18Instance) => {
+const renderPosts = ({ posts, readedPost }, i18Instance) => {
 	const postsNode = document.querySelector(".posts")
 	postsNode.replaceChildren()
 
@@ -54,7 +55,7 @@ const renderPosts = (posts, i18Instance) => {
 		buttonNode.textContent = i18Instance.t("openModalBtn")
 
 		buttonNode.onclick = () => {
-			renderModal({ title, description, url })
+			renderModal({ title, description, url }, readedPost)
 			linkNode.classList.remove("fw-bold")
 			linkNode.classList.add("fw-normal")
 		}
@@ -66,38 +67,55 @@ const renderPosts = (posts, i18Instance) => {
 	postsNode.append(listNode)
 }
 
-const renderFeedback = (feedback, i18nextInstance) => {
+const renderFeedback = (status, i18nextInstance, proccesState) => {
 	const feedbackElement = document.querySelector("#feedback")
-	if (feedback === "success") {
-		feedbackElement.textContent = i18nextInstance.t("successFeedback")
-		feedbackElement.classList.remove("text-danger")
-		feedbackElement.classList.add("text-success")
-		return
+	switch (status) {
+		case "error": {
+			feedbackElement.textContent = i18nextInstance.t(proccesState)
+			feedbackElement.classList.remove("text-success")
+			feedbackElement.classList.add("text-danger")
+			break
+		}
+		case "loading": {
+			feedbackElement.textContent = i18nextInstance.t(proccesState)
+			feedbackElement.classList.remove("text-danger")
+			feedbackElement.classList.add("text-success")
+			break
+		}
+		case "success": {
+			feedbackElement.textContent = i18nextInstance.t(proccesState)
+			feedbackElement.classList.remove("text-danger")
+			feedbackElement.classList.add("text-success")
+			break
+		}
+		default:
+			break
 	}
-	if (feedback instanceof Error) {
-		feedbackElement.textContent = i18nextInstance.t(
-			`errors.${feedback.message}`
-		)
-		feedbackElement.classList.remove("text-success")
-		feedbackElement.classList.add("text-danger")
-	}
+	// if (feedback === "success") {
+	// 	feedbackElement.textContent = i18nextInstance.t("successFeedback")
+	// 	feedbackElement.classList.remove("text-danger")
+	// 	feedbackElement.classList.add("text-success")
+	// 	return
+	// }
+	// if (feedback instanceof Error) {
+	// 	feedbackElement.textContent = i18nextInstance.t(
+	// 		`errors.${feedback.message}`
+	// 	)
+	// 	feedbackElement.classList.remove("text-success")
+	// 	feedbackElement.classList.add("text-danger")
+	// }
 }
-
-const renderForm = (status, i18nInstance) => {
-	const feedbackElement = document.querySelector("#feedback")
+const renderError = (value, i18Instance, proccesState) => {
+	renderFeedback(value, i18Instance, proccesState)
+}
+const renderForm = (status) => {
 	const formElement = document.querySelector("form")
 	const inputElement = formElement.querySelector("input")
 	const submitButton = formElement.querySelector("button")
-	if (!inputElement.value.trim().length) {
-		feedbackElement.textContent = i18nInstance.t("errors.required")
-	}
-	if (status === "pending") {
+	if (status) {
 		inputElement.setAttribute("readonly", true)
 		formElement.setAttribute("disabled", true)
 		submitButton.setAttribute("disabled", true)
-		feedbackElement.classList.remove("text-danger")
-		feedbackElement.classList.add("text-success")
-		feedbackElement.textContent = i18nInstance.t("loading")
 	} else {
 		inputElement.removeAttribute("readonly")
 		formElement.removeAttribute("disabled")
@@ -133,4 +151,4 @@ const renderFeeds = (feeds, i18Instance) => {
 	})
 }
 
-export { renderForm, renderModal, renderFeeds, renderPosts, renderFeedback }
+export { renderForm, renderFeeds, renderPosts, renderFeedback, renderError }

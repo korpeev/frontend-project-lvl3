@@ -9,12 +9,8 @@ const proxyfy = (url) =>
 	).toString()
 
 const fetchData = async (url) => {
-	try {
-		const response = await axios.get(proxyfy(url))
-		return response.data
-	} catch (error) {
-		throw new Error("network")
-	}
+	const response = await axios.get(proxyfy(url))
+	return response
 }
 
 export const FETCHING_TIMEOUT = 5000
@@ -22,8 +18,8 @@ export const FETCHING_TIMEOUT = 5000
 export const fetchNewPosts = (watchedState) => {
 	const promises = watchedState.feeds.map((feed) =>
 		fetchData(feed.url)
-			.then((contents) => {
-				const feedData = parseRss(contents)
+			.then((response) => {
+				const feedData = parseRss(response.data.contents)
 				const newPosts = feedData.posts.map((item) => ({
 					...item,
 					feedId: feed.id,

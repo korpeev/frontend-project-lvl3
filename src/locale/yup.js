@@ -1,9 +1,9 @@
 export default {
-  string: {
-    url: () => 'url',
-  },
-  mixed: {
-    required: () => 'required',
-    notOneOf: () => 'duplicate',
-  },
-};
+	string: {
+		url: () => "errors.url",
+	},
+	mixed: {
+		required: () => "erros.required",
+		notOneOf: () => "erros.duplicate",
+	},
+}
