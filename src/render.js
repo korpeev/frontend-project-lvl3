@@ -6,12 +6,10 @@ const renderModal = (post, readedPost) => {
   const closeBtns = modal.querySelectorAll('button[data-dismiss="modal"]');
   modal.classList.remove('remove');
   modal.classList.add('show');
-  closeBtns.forEach((el) =>
-    el.addEventListener('click', () => {
-      modal.classList.add('remove');
-      modal.classList.remove('show');
-    })
-  );
+  closeBtns.forEach((el) => el.addEventListener('click', () => {
+    modal.classList.add('remove');
+    modal.classList.remove('show');
+  }));
   const modalTitle = modal.querySelector('.modal-title');
   const modalBody = modal.querySelector('.modal-body');
   const linkBtn = modal.querySelector('.link');
@@ -39,7 +37,7 @@ const renderPosts = ({ posts, readedPost }, i18Instance) => {
       'list-group-item',
       'd-flex',
       'justify-content-between',
-      'align-items-start'
+      'align-items-start',
     );
 
     const linkNode = document.createElement('a');

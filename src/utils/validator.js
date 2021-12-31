@@ -7,7 +7,7 @@ const validator = (validationUrl, data) => {
     .required()
     .notOneOf(
       data.map(({ url }) => url),
-      'errors.duplicate'
+      'errors.duplicate',
     );
   const validated = validationScheme.validate(validationUrl);
   return validated;
