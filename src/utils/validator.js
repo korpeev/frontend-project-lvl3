@@ -1,16 +1,16 @@
-import * as yup from "yup"
+import * as yup from 'yup';
 
 const validator = (validationUrl, data) => {
-	const validationScheme = yup
-		.string()
-		.url()
-		.required()
-		.notOneOf(
-			data.map(({ url }) => url),
-			"errors.duplicate"
-		)
-	const validated = validationScheme.validate(validationUrl)
-	return validated
-}
+  const validationScheme = yup
+    .string()
+    .url()
+    .required()
+    .notOneOf(
+      data.map(({ url }) => url),
+      'errors.duplicate'
+    );
+  const validated = validationScheme.validate(validationUrl);
+  return validated;
+};
 
-export default validator
+export default validator;

@@ -1,48 +1,48 @@
-import axios from "axios"
-import { v4 as uuidv4 } from "uuid"
-import _ from "lodash"
-import parseRss from "./parser.js"
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash';
+import parseRss from './parser.js';
 
 const proxyfy = (url) =>
-	new URL(
-		`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${url}`
-	).toString()
+  new URL(
+    `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${url}`
+  ).toString();
 
 const fetchData = async (url) => {
-	const response = await axios.get(proxyfy(url))
-	return response
-}
+  const response = await axios.get(proxyfy(url));
+  return response;
+};
 
-export const FETCHING_TIMEOUT = 5000
+export const FETCHING_TIMEOUT = 5000;
 
 export const fetchNewPosts = (watchedState) => {
-	const promises = watchedState.feeds.map((feed) =>
-		fetchData(feed.url)
-			.then((response) => {
-				const feedData = parseRss(response.data.contents)
-				const newPosts = feedData.posts.map((item) => ({
-					...item,
-					feedId: feed.id,
-				}))
-				const oldPosts = watchedState.posts.filter(
-					(post) => post.feedId === feed.id
-				)
-				const posts = _.differenceBy(newPosts, oldPosts, "title").map(
-					(post) => ({ ...post, id: uuidv4() })
-				)
-				if (posts.length > 0) {
-					watchedState.posts.unshift(posts)
-					console.log("new posts")
-				}
-			})
-			.catch(() => {
-				throw new Error("network")
-			})
-	)
+  const promises = watchedState.feeds.map((feed) =>
+    fetchData(feed.url)
+      .then((response) => {
+        const feedData = parseRss(response.data.contents);
+        const newPosts = feedData.posts.map((item) => ({
+          ...item,
+          feedId: feed.id,
+        }));
+        const oldPosts = watchedState.posts.filter(
+          (post) => post.feedId === feed.id
+        );
+        const posts = _.differenceBy(newPosts, oldPosts, 'title').map(
+          (post) => ({ ...post, id: uuidv4() })
+        );
+        if (posts.length > 0) {
+          watchedState.posts.unshift(posts);
+          console.log('new posts');
+        }
+      })
+      .catch(() => {
+        throw new Error('network');
+      })
+  );
 
-	Promise.all(promises).finally(() => {
-		setTimeout(() => fetchNewPosts(watchedState), FETCHING_TIMEOUT)
-	})
-}
+  Promise.all(promises).finally(() => {
+    setTimeout(() => fetchNewPosts(watchedState), FETCHING_TIMEOUT);
+  });
+};
 
-export default fetchData
+export default fetchData;
