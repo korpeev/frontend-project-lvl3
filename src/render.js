@@ -64,6 +64,15 @@ const renderPosts = ({ posts, readedPost }, i18Instance) => {
   postsNode.append(headerPostNode);
   postsNode.append(listNode);
 };
+const removeAttrs = (button, input) => {
+  button.removeAttribute('disabled');
+  input.removeAttribute('readonly');
+};
+
+const setAttrs = (button, input) => {
+  button.setAttribute('disabled', true);
+  input.setAttribute('readonly', true);
+};
 
 const renderFeedback = (status, i18nextInstance, proccesState) => {
   const feedbackElement = document.querySelector('#feedback');
@@ -74,24 +83,21 @@ const renderFeedback = (status, i18nextInstance, proccesState) => {
       feedbackElement.textContent = i18nextInstance.t(proccesState);
       feedbackElement.classList.remove('text-success');
       feedbackElement.classList.add('text-danger');
-      sumbitButton.removeAttribute('disabled');
-      input.removeAttribute('readonly');
+      removeAttrs(sumbitButton, input);
       break;
     }
     case 'loading': {
       feedbackElement.textContent = i18nextInstance.t(proccesState);
       feedbackElement.classList.remove('text-danger');
       feedbackElement.classList.add('text-success');
-      sumbitButton.setAttribute('disabled', true);
-      input.setAttribute('readonly', true);
+      setAttrs(sumbitButton, input);
       break;
     }
     case 'success': {
       feedbackElement.textContent = i18nextInstance.t(proccesState);
       feedbackElement.classList.remove('text-danger');
       feedbackElement.classList.add('text-success');
-      sumbitButton.removeAttribute('disabled');
-      input.removeAttribute('readonly');
+      removeAttrs(sumbitButton, input);
       break;
     }
     default:
