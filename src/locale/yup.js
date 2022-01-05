@@ -3,7 +3,7 @@ export default {
     url: () => 'errors.url',
   },
   mixed: {
-    required: () => 'erros.required',
-    notOneOf: () => 'erros.duplicate',
+    required: () => 'errors.required',
+    notOneOf: () => 'errors.duplicate',
   },
 };

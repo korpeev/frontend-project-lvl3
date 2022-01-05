@@ -21,7 +21,7 @@ export default async () => {
     posts: [],
     error: '',
     addingPosts: '',
-    proccesState: '',
+    processError: '',
     form: {
       isValid: null,
     },
@@ -39,12 +39,7 @@ export default async () => {
     validator(url, watchedState.feeds)
       .then((link) => {
         watchedState.error = null;
-        return link;
-      })
-      .then((link) => {
-        watchedState.proccesState = 'loading';
         watchedState.addingPosts = 'loading';
-        inputElement.classList.remove('is-invalid');
         return fetchData(link);
       })
       .then((response) => {
@@ -56,9 +51,11 @@ export default async () => {
           description,
           url,
         });
-        const modifyPosts = [
-          ...posts.map((post) => ({ ...post, feedId: id, id: uuidv4() })),
-        ];
+        const modifyPosts = posts.map((post) => ({
+          ...post,
+          feedId: id,
+          id: uuidv4(),
+        }));
         watchedState.posts.push(...modifyPosts);
         watchedState.proccesState = 'success';
         watchedState.addingPosts = 'success';
@@ -68,18 +65,15 @@ export default async () => {
       })
       .catch((error) => {
         if (error.name === 'ValidationError') {
-          watchedState.proccesState = error.message;
+          watchedState.processError = error.message;
           watchedState.addingPosts = 'error';
           watchedState.form.isValid = false;
           watchedState.error = error.error;
-          inputElement.classList.add('is-invalid');
-        }
-        if (error.isRssParseError) {
-          watchedState.proccesState = 'errors.rssNotFound';
+        } else if (error.isRssParseError) {
+          watchedState.processError = 'errors.rssNotFound';
           watchedState.addingPosts = 'error';
-        }
-        if (axios.isAxiosError(error)) {
-          watchedState.proccesState = 'errors.network';
+        } else if (axios.isAxiosError(error)) {
+          watchedState.processError = 'errors.network';
           watchedState.addingPosts = 'error';
         }
       });

@@ -77,27 +77,30 @@ const setAttrs = (button, input) => {
 const renderFeedback = (status, i18nextInstance, proccesState) => {
   const feedbackElement = document.querySelector('#feedback');
   const sumbitButton = document.querySelector('button[type="submit"]');
-  const input = document.querySelector('#url-input');
+  const inputElement = document.querySelector('#url-input');
   switch (status) {
     case 'error': {
       feedbackElement.textContent = i18nextInstance.t(proccesState);
       feedbackElement.classList.remove('text-success');
       feedbackElement.classList.add('text-danger');
-      removeAttrs(sumbitButton, input);
+      inputElement.classList.add('is-invalid');
+      removeAttrs(sumbitButton, inputElement);
       break;
     }
     case 'loading': {
+      inputElement.classList.remove('is-invalid');
       feedbackElement.textContent = i18nextInstance.t(proccesState);
       feedbackElement.classList.remove('text-danger');
       feedbackElement.classList.add('text-success');
-      setAttrs(sumbitButton, input);
+      setAttrs(sumbitButton, inputElement);
       break;
     }
     case 'success': {
       feedbackElement.textContent = i18nextInstance.t(proccesState);
       feedbackElement.classList.remove('text-danger');
       feedbackElement.classList.add('text-success');
-      removeAttrs(sumbitButton, input);
+      removeAttrs(sumbitButton, inputElement);
+      inputElement.focus();
       break;
     }
     default:
