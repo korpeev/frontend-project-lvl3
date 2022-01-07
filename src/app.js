@@ -20,7 +20,7 @@ export default async () => {
     feeds: [],
     posts: [],
     error: '',
-    addingPosts: '',
+    addingFeeds: '',
     processError: '',
     form: {
       isValid: null,
@@ -39,7 +39,7 @@ export default async () => {
     validator(url, watchedState.feeds)
       .then((link) => {
         watchedState.error = null;
-        watchedState.addingPosts = 'loading';
+        watchedState.addingFeeds = 'loading';
         return fetchData(link);
       })
       .then((response) => {
@@ -57,24 +57,20 @@ export default async () => {
           id: uuidv4(),
         }));
         watchedState.posts.push(...modifyPosts);
-        watchedState.proccesState = 'success';
-        watchedState.addingPosts = 'success';
-        formElement.reset();
-        inputElement.classList.remove('is-invalid');
-        inputElement.focus();
+        watchedState.addingFeeds = 'success';
       })
       .catch((error) => {
         if (error.name === 'ValidationError') {
           watchedState.processError = error.message;
-          watchedState.addingPosts = 'error';
+          watchedState.addingFeeds = 'error';
           watchedState.form.isValid = false;
           watchedState.error = error.error;
         } else if (error.isRssParseError) {
           watchedState.processError = 'errors.rssNotFound';
-          watchedState.addingPosts = 'error';
+          watchedState.addingFeeds = 'error';
         } else if (axios.isAxiosError(error)) {
           watchedState.processError = 'errors.network';
-          watchedState.addingPosts = 'error';
+          watchedState.addingFeeds = 'error';
         }
       });
   };
