@@ -29,7 +29,6 @@ export default async () => {
   };
 
   const formElement = document.querySelector('form');
-  const inputElement = formElement.querySelector('input');
   const watchedState = getWatchedState(defaultState, i18Instance);
   const handleSubmit = (e) => {
     e.preventDefault();
