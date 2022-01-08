@@ -61,7 +61,7 @@ test('valid rss and duplicate', async () => {
         'https://hexlet.io/lessons.rss',
       )}`,
     )
-    .reply(200, validRSS);
+    .reply(200, { contents: validRSS });
   fireEvent.input(elements.input, {
     target: {
       value: 'https://hexlet.io/lessons.rss',

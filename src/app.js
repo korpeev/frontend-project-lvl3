@@ -30,48 +30,46 @@ export default async () => {
 
   const formElement = document.querySelector('form');
   const watchedState = getWatchedState(defaultState, i18Instance);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url');
     watchedState.form.isValid = true;
-    validator(url, watchedState.feeds)
-      .then((link) => {
-        watchedState.error = null;
-        watchedState.addingFeeds = 'loading';
-        return fetchData(link);
-      })
-      .then((response) => {
-        const { title, description, posts } = parseRss(response.data.contents);
-        const id = uuidv4();
-        watchedState.feeds.push({
-          title,
-          id,
-          description,
-          url,
-        });
-        const modifyPosts = posts.map((post) => ({
-          ...post,
-          feedId: id,
-          id: uuidv4(),
-        }));
-        watchedState.posts.push(...modifyPosts);
-        watchedState.addingFeeds = 'success';
-      })
-      .catch((error) => {
-        if (error.name === 'ValidationError') {
-          watchedState.processError = error.message;
-          watchedState.addingFeeds = 'error';
-          watchedState.form.isValid = false;
-          watchedState.error = error.error;
-        } else if (error.isRssParseError) {
-          watchedState.processError = 'errors.rssNotFound';
-          watchedState.addingFeeds = 'error';
-        } else if (axios.isAxiosError(error)) {
-          watchedState.processError = 'errors.network';
-          watchedState.addingFeeds = 'error';
-        }
+    try {
+      const link = await validator(url, watchedState.feeds);
+      watchedState.addingFeeds = 'loading';
+      const {
+        data: { contents },
+      } = await fetchData(link);
+      const { title, description, posts } = parseRss(contents);
+      const id = uuidv4();
+      watchedState.feeds.push({
+        title,
+        id,
+        description,
+        url,
       });
+      const modifyPosts = posts.map((post) => ({
+        ...post,
+        feedId: id,
+        id: uuidv4(),
+      }));
+      watchedState.posts.push(...modifyPosts);
+      watchedState.addingFeeds = 'success';
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        watchedState.processError = error.message;
+        watchedState.addingFeeds = 'error';
+        watchedState.form.isValid = false;
+        watchedState.error = error.error;
+      } else if (error.isRssParseError) {
+        watchedState.processError = 'errors.rssNotFound';
+        watchedState.addingFeeds = 'error';
+      } else if (axios.isAxiosError(error)) {
+        watchedState.processError = 'errors.network';
+        watchedState.addingFeeds = 'error';
+      }
+    }
   };
 
   formElement.addEventListener('submit', handleSubmit);
